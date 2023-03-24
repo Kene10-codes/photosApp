@@ -2,18 +2,17 @@ import {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, Image} from 'react-native';
 import {ACCESS_KEY, API_URL} from '../../constants';
 
-export default function Home () {
+export default function Home({navigation}) {
   const [data, setData] = useState ([]);
   const [loading, setLoading] = useState (true);
 
   const desc = data.map (datum => (
     <View style={styles.container} key={datum.id}>
-
       <Image
         source={{uri: `${datum.urls.full}`}}
         style={{width: 300, height: 200}}
       />
-      <Text>Author: {datum.user.name}</Text>
+      <Text style={styles.author}>Author: {datum.user.name}</Text>
       {datum.current_user_collections.map (desc => <Text>{desc.id}</Text>)}
     </View>
   ));
@@ -24,7 +23,6 @@ export default function Home () {
       headers: new Headers ({
         Authorization: `Client-ID ${ACCESS_KEY}`,
         'Content-Type': 'application/json',
-        Accept: 'image/*',
       }),
     })
       .then (response => response.json ())
@@ -41,10 +39,22 @@ export default function Home () {
 
 const styles = StyleSheet.create ({
   container: {
-    flex: 1,
+    flex: 3,
+    flexDirection: 'column',
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    marginHorizontal: 'auto',
+    backgroundColor: '#eee',
     color: '#d33',
+    marginTop: 25,
+  },
+  row: {
+    flexDirection: 'row',
+  },
+  author: {
+    fontSize: 16,
+    paddingTop: 5,
+    paddingBottom: 5,
   },
 });
