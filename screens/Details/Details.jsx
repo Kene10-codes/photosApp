@@ -1,7 +1,8 @@
 import React from 'react';
 import {View, Text, StyleSheet, Image} from 'react-native';
 
-function Details () {
+function Details({navigation, route}) {
+  console.log (route.params);
   return (
     <View>
       <Text>Details</Text>

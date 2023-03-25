@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, Image} from 'react-native';
+import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {ACCESS_KEY, API_URL} from '../../constants';
 
 export default function Home({navigation}) {
@@ -7,14 +7,21 @@ export default function Home({navigation}) {
   const [loading, setLoading] = useState (true);
 
   const desc = data.map (datum => (
-    <View style={styles.container} key={datum.id}>
+    <TouchableOpacity
+      style={styles.container}
+      key={datum.id}
+      onPress={() => {
+        navigation.navigate ('Details', {datum});
+      }}
+
+    >
       <Image
         source={{uri: `${datum.urls.full}`}}
         style={{width: 300, height: 200}}
       />
       <Text style={styles.author}>Author: {datum.user.name}</Text>
       {datum.current_user_collections.map (desc => <Text>{desc.id}</Text>)}
-    </View>
+    </TouchableOpacity>
   ));
 
   useEffect (() => {
@@ -30,6 +37,24 @@ export default function Home({navigation}) {
       .catch (error => console.error (error))
       .finally (() => setLoading (false));
   }, []);
+
+  // get Image Func
+  function getImage (id) {
+    fetch ('https://api.unsplash.com/photos/:' + id, {
+      method: 'GET',
+      headers: new Headers ({
+        Authorization: `${ACCESS_KEY}`,
+        'Content-Type': 'application/json',
+      }),
+    })
+      .then (response => response.json ())
+      .then (data => {
+        console.log (data);
+        navigation.navigate ('Details');
+      })
+      .catch (error => console.error (error))
+      .finally (() => setLoading (false));
+  }
   return (
     <View style={styles.container}>
       {loading ? <Text>Loading...</Text> : <Text>{desc}</Text>}
