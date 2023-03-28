@@ -1,5 +1,13 @@
 import {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  FlatList,
+  ScrollView,
+} from 'react-native';
 import {ACCESS_KEY, API_URL} from '../../constants';
 
 export default function Home({navigation}) {
@@ -10,17 +18,14 @@ export default function Home({navigation}) {
     <TouchableOpacity
       style={styles.container}
       key={datum.id}
-      onPress={() => {
-        navigation.navigate ('Details', {datum});
-      }}
-
+      iu
+      onPress={() => navigation.navigate ('Details', {datum})}
     >
       <Image
-        source={{uri: `${datum.urls.full}`}}
+        source={{uri: `${datum.urls.small}`}}
         style={{width: 300, height: 200}}
       />
       <Text style={styles.author}>Author: {datum.user.name}</Text>
-      {datum.current_user_collections.map (desc => <Text>{desc.id}</Text>)}
     </TouchableOpacity>
   ));
 
@@ -56,9 +61,11 @@ export default function Home({navigation}) {
       .finally (() => setLoading (false));
   }
   return (
-    <View style={styles.container}>
-      {loading ? <Text>Loading...</Text> : <Text>{desc}</Text>}
-    </View>
+    <ScrollView>
+      <View style={styles.container}>
+        {loading ? <Text>Loading...</Text> : <Text>{desc}</Text>}
+      </View>
+    </ScrollView>
   );
 }
 
